@@ -1,0 +1,75 @@
+policy,ce_calls_per_query,ndcg@10
+mE5 dense → CE top-k (cascade),0.0,0.7595117795055255
+mE5 dense → CE top-k (cascade),5.0,0.8099433145863791
+mE5 dense → CE top-k (cascade),10.0,0.8234851588455288
+mE5 dense → CE top-k (cascade),20.0,0.8393839407510604
+mE5 dense → CE top-k (cascade),30.0,0.8430696356409548
+Convex fusion → CE top-k (cascade),0.0,0.770191324686911
+Convex fusion → CE top-k (cascade),5.0,0.8197779868684439
+Convex fusion → CE top-k (cascade),10.0,0.8313893511584255
+Convex fusion → CE top-k (cascade),20.0,0.8437155313526934
+Convex fusion → CE top-k (cascade),30.0,0.8466595497103956
+TAG-Rank (cheap) → CE top-k (cascade),0.0,0.8163386796764631
+TAG-Rank (cheap) → CE top-k (cascade),5.0,0.8387028967498167
+TAG-Rank (cheap) → CE top-k (cascade),10.0,0.8468081642354526
+TAG-Rank (cheap) → CE top-k (cascade),20.0,0.8530266893084623
+TAG-Rank (cheap) → CE top-k (cascade),30.0,0.855650033930261
+"MLP, CE scores as inputs (fusion picks)",0.0,0.8018409803367434
+"MLP, CE scores as inputs (fusion picks)",5.0,0.8383583476632598
+"MLP, CE scores as inputs (model picks, 2-pass)",5.0,0.8398522505449914
+"MLP, CE scores as inputs (fusion picks)",10.0,0.8488970224240184
+"MLP, CE scores as inputs (model picks, 2-pass)",10.0,0.8498959220564312
+"MLP, CE scores as inputs (fusion picks)",20.0,0.8542156663548865
+"MLP, CE scores as inputs (model picks, 2-pass)",20.0,0.8605922960016187
+"MLP, CE scores as inputs (fusion picks)",30.0,0.8566145746441353
+"MLP, CE scores as inputs (model picks, 2-pass)",30.0,0.8621025940331947
+TAG-Rank+CE (fusion picks),0.0,0.8063267908652075
+TAG-Rank+CE (fusion picks),5.0,0.84220382213454
+"TAG-Rank+CE (model picks, 2-pass)",5.0,0.843334332205279
+TAG-Rank+CE (fusion picks),10.0,0.8509566421914685
+"TAG-Rank+CE (model picks, 2-pass)",10.0,0.8536232989317695
+TAG-Rank+CE (fusion picks),20.0,0.8561673296451847
+"TAG-Rank+CE (model picks, 2-pass)",20.0,0.8609390301857178
+TAG-Rank+CE (fusion picks),30.0,0.8584112988499234
+"TAG-Rank+CE (model picks, 2-pass)",30.0,0.8625968766543294
+"TAG-Rank+CE ×5 ensemble (model picks, 2-pass)",0.0,0.8089831159869201
+"TAG-Rank+CE ×5 ensemble (model picks, 2-pass)",5.0,0.8455591607238543
+"TAG-Rank+CE ×5 ensemble (model picks, 2-pass)",10.0,0.8547164639544628
+"TAG-Rank+CE ×5 ensemble (model picks, 2-pass)",20.0,0.8633144350285473
+"TAG-Rank+CE ×5 ensemble (model picks, 2-pass)",30.0,0.8640062587338456
+router: learned router,0.0,0.8088167253252003
+router: low-margin first (heuristic),0.0,0.8088167253252003
+"router: oracle (true gain, upper bound)",0.0,0.8088167253252003
+router: random,0.0,0.8088167253252003
+router: learned router,3.0,0.8210795825186986
+router: low-margin first (heuristic),3.0,0.8203011244259897
+"router: oracle (true gain, upper bound)",3.0,0.8534412774053958
+router: random,3.0,0.8139822728033886
+router: learned router,6.0,0.8318579635638692
+router: low-margin first (heuristic),6.0,0.8285368095135082
+"router: oracle (true gain, upper bound)",6.0,0.8732441817950666
+router: random,6.0,0.81747395233803
+router: learned router,9.0,0.839032295459534
+router: low-margin first (heuristic),9.0,0.8344613616611168
+"router: oracle (true gain, upper bound)",9.0,0.8773854527114826
+router: random,9.0,0.8230288467498182
+router: learned router,12.0,0.8473782037248707
+router: low-margin first (heuristic),12.0,0.846620378580501
+"router: oracle (true gain, upper bound)",12.0,0.8773854527114826
+router: random,12.0,0.8284711786214153
+router: learned router,15.0,0.8538672541966984
+router: low-margin first (heuristic),15.0,0.8535384471110868
+"router: oracle (true gain, upper bound)",15.0,0.8773854527114826
+router: random,15.0,0.8352605854690884
+router: learned router,18.0,0.8576330965341034
+router: low-margin first (heuristic),18.0,0.8575346126992611
+"router: oracle (true gain, upper bound)",18.0,0.8773854527114826
+router: random,18.0,0.8408933588572257
+router: learned router,24.0,0.859145432861878
+router: low-margin first (heuristic),24.0,0.8592322170411416
+"router: oracle (true gain, upper bound)",24.0,0.8773854527114826
+router: random,24.0,0.8498559895812114
+router: learned router,30.0,0.8595660940135835
+router: low-margin first (heuristic),30.0,0.8595660940135835
+"router: oracle (true gain, upper bound)",30.0,0.8595660940135835
+router: random,30.0,0.8595660940135834

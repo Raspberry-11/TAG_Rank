@@ -1,0 +1,206 @@
+RUN_MODE = full | SMOKE = False | langs = ['sw', 'yo', 'bn', 'te'] | work_dir = /kaggle/working
+
+>> download / locate data
+MIRACL sw: corpus shards=1 | train: 1901 topics / 1901 judged, dev: 482 topics / 482 judged
+MIRACL yo: corpus shards=1 | dev: 119 topics / 119 judged
+MIRACL bn: corpus shards=1 | train: 1631 topics / 1631 judged, dev: 411 topics / 411 judged
+MIRACL te: corpus shards=2 | train: 3452 topics / 3452 judged, dev: 828 topics / 828 judged
+Mr.TyDi sw: test 670 topics
+Mr.TyDi bn: test 111 topics
+download / locate data done in 0.1 min (total 0.2 min)
+
+>> PySpark profiling
+[spark] sw: 131,924 passages, 47,793 articles, vocab 205,034
+[spark] yo: 49,043 passages, 33,094 articles, vocab 110,803
+[spark] bn: 297,265 passages, 63,762 articles, vocab 646,163
+[spark] te: 518,079 passages, 66,353 articles, vocab 1,188,203
+PySpark profiling done in 5.9 min (total 6.2 min)
+
+>> Spark MinHash-LSH lexical corpus graph
+[lsh] sw: hashed 63,194 passages | 10,132 pairs with J>=0.4 | near-dup (J>=0.8) 3,730 | same-article 722 | 31s
+[lsh] yo: hashed 17,953 passages | 2,531 pairs with J>=0.4 | near-dup (J>=0.8) 1,413 | same-article 1,047 | 12s
+[lsh] bn: hashed 189,689 passages | 14,565 pairs with J>=0.4 | near-dup (J>=0.8) 4,463 | same-article 3,286 | 65s
+[lsh] te: hashed 199,947 passages | 32,865 pairs with J>=0.4 | near-dup (J>=0.8) 12,875 | same-article 1,885 | 103s
+Spark MinHash-LSH lexical corpus graph done in 3.5 min (total 9.7 min)
+
+>> first-stage retrieval + graph construction (MIRACL)
+[miracl/sw] corpus: 131,924 passages, 47,793 articles (2.76 passages/article)
+  BM25 passage + article index: vocab 205,285, nnz 3,661,481, article nnz 2,591,242 (5s)
+loading encoder intfloat/multilingual-e5-base
+    encoded 256/131,924  (96/s)
+    encoded 26,624/131,924  (699/s)
+    encoded 52,992/131,924  (890/s)
+    encoded 79,360/131,924  (1032/s)
+    encoded 105,728/131,924  (1179/s)
+    encoded 131,924/131,924  (1324/s)
+  encoded corpus in 1.7 min
+  train: 1901 queries | pool avg 109.1 | relevant only via expansion: dense 9, LSH 0 | relevant passage is best of its article: 0.75
+  dev: 482 queries | pool avg 109.0 | relevant only via expansion: dense 6, LSH 0 | relevant passage is best of its article: 0.72
+[miracl/yo] corpus: 49,043 passages, 33,094 articles (1.48 passages/article)
+  BM25 passage + article index: vocab 111,187, nnz 1,025,402, article nnz 761,240 (2s)
+    encoded 256/49,043  (352/s)
+    encoded 9,984/49,043  (548/s)
+    encoded 19,712/49,043  (752/s)
+    encoded 29,440/49,043  (945/s)
+    encoded 39,168/49,043  (1095/s)
+    encoded 48,896/49,043  (1233/s)
+  encoded corpus in 0.7 min
+  dev: 119 queries | pool avg 113.7 | relevant only via expansion: dense 1, LSH 0 | relevant passage is best of its article: 0.86
+[miracl/bn] corpus: 297,265 passages, 63,762 articles (4.66 passages/article)
+  BM25 passage + article index: vocab 646,774, nnz 13,622,290, article nnz 9,823,973 (20s)
+    encoded 256/297,265  (252/s)
+    encoded 59,648/297,265  (447/s)
+    encoded 119,040/297,265  (497/s)
+    encoded 178,432/297,265  (564/s)
+    encoded 237,824/297,265  (642/s)
+    encoded 297,216/297,265  (739/s)
+  encoded corpus in 6.7 min
+  train: 1631 queries | pool avg 108.4 | relevant only via expansion: dense 5, LSH 0 | relevant passage is best of its article: 0.67
+  dev: 411 queries | pool avg 108.2 | relevant only via expansion: dense 0, LSH 0 | relevant passage is best of its article: 0.67
+[miracl/te] corpus: 518,079 passages, 66,353 articles (7.81 passages/article)
+  BM25 passage + article index: vocab 1,190,925, nnz 20,468,041, article nnz 15,021,886 (31s)
+    encoded 256/518,079  (202/s)
+    encoded 103,680/518,079  (431/s)
+    encoded 207,104/518,079  (514/s)
+    encoded 310,528/518,079  (596/s)
+    encoded 413,952/518,079  (694/s)
+    encoded 517,376/518,079  (806/s)
+  encoded corpus in 10.7 min
+  train: 3452 queries | pool avg 111.2 | relevant only via expansion: dense 4, LSH 0 | relevant passage is best of its article: 0.81
+  dev: 828 queries | pool avg 111.3 | relevant only via expansion: dense 4, LSH 0 | relevant passage is best of its article: 0.81
+first-stage retrieval + graph construction (MIRACL) done in 24.5 min (total 34.2 min)
+
+>> first-stage retrieval + graph construction (Mr. TyDi)
+[mrtydi/sw] corpus: 136,689 passages, 47,792 articles (2.86 passages/article)
+  BM25 passage + article index: vocab 218,078, nnz 3,801,178, article nnz 2,668,113 (5s)
+    encoded 256/136,689  (367/s)
+    encoded 27,392/136,689  (649/s)
+    encoded 54,528/136,689  (833/s)
+    encoded 81,664/136,689  (975/s)
+    encoded 108,800/136,689  (1120/s)
+    encoded 135,936/136,689  (1265/s)
+  encoded corpus in 1.8 min
+  test: 670 queries | pool avg 109.6 | relevant only via expansion: dense 2, LSH 0 | relevant passage is best of its article: 0.67
+[mrtydi/bn] corpus: 304,059 passages, 63,762 articles (4.77 passages/article)
+  BM25 passage + article index: vocab 660,382, nnz 13,849,314, article nnz 9,953,962 (20s)
+    encoded 256/304,059  (240/s)
+    encoded 60,928/304,059  (443/s)
+    encoded 121,600/304,059  (494/s)
+    encoded 182,272/304,059  (562/s)
+    encoded 242,944/304,059  (640/s)
+    encoded 303,616/304,059  (737/s)
+  encoded corpus in 6.9 min
+  test: 111 queries | pool avg 108.2 | relevant only via expansion: dense 0, LSH 0 | relevant passage is best of its article: 0.56
+first-stage retrieval + graph construction (Mr. TyDi) done in 9.4 min (total 43.6 min)
+{'miracl/sw/train': 1901, 'miracl/sw/dev': 482, 'miracl/yo/dev': 119, 'miracl/bn/train': 1631, 'miracl/bn/dev': 411, 'miracl/te/train': 3452, 'miracl/te/dev': 828, 'mrtydi/sw/test': 670, 'mrtydi/bn/test': 111}
+
+>> cross-encoder scoring of pools
+loading cross-encoder BAAI/bge-reranker-v2-m3
+    CE 64/295,374 pairs (98/s)
+    CE 36,992/295,374 pairs (139/s)
+    CE 73,920/295,374 pairs (142/s)
+    CE 110,848/295,374 pairs (146/s)
+    CE 147,776/295,374 pairs (154/s)
+    CE 184,704/295,374 pairs (163/s)
+    CE 221,632/295,374 pairs (174/s)
+    CE 258,560/295,374 pairs (185/s)
+scored 295,374 query-passage pairs
+cross-encoder scoring of pools done in 25.3 min (total 68.9 min)
+train queries 5588 | val 1396 | eval groups ['miracl:sw', 'miracl:yo', 'miracl:bn', 'miracl:te', 'mrtydi:sw', 'mrtydi:bn']
+passages per article: {'miracl:sw': 2.76, 'miracl:yo': 1.48, 'miracl:bn': 4.66, 'miracl:te': 7.81, 'mrtydi:sw': 2.86, 'mrtydi:bn': 4.77} | gate threshold 2.21 | article channel: {'miracl:sw': True, 'miracl:yo': False, 'miracl:bn': True, 'miracl:te': True, 'mrtydi:sw': True, 'mrtydi:bn': True}
+
+>> training-free baselines
+convex λ: 0.1 | RRF weight on BM25: 0.0
+training-free baselines done in 0.1 min (total 69.0 min)
+
+>> train + evaluate graph rerankers
+  MLP reranker (no graph) seed 13: best val nDCG@10 0.8191 after 16 epochs (59,744 params)
+  MLP reranker (no graph) seed 42: best val nDCG@10 0.8186 after 16 epochs (59,744 params)
+  MLP reranker (no graph) seed 2026: best val nDCG@10 0.8206 after 18 epochs (59,744 params)
+  MLP reranker (no graph) seed 7: best val nDCG@10 0.8170 after 13 epochs (59,744 params)
+  MLP reranker (no graph) seed 99: best val nDCG@10 0.8199 after 20 epochs (59,744 params)
+  MLP reranker (no graph): 6.8 min
+  GNN, dense edges only seed 13: best val nDCG@10 0.8217 after 14 epochs (126,752 params)
+  GNN, dense edges only seed 42: best val nDCG@10 0.8216 after 15 epochs (126,752 params)
+  GNN, dense edges only seed 2026: best val nDCG@10 0.8206 after 14 epochs (126,752 params)
+  GNN, dense edges only seed 7: best val nDCG@10 0.8206 after 13 epochs (126,752 params)
+  GNN, dense edges only seed 99: best val nDCG@10 0.8213 after 16 epochs (126,752 params)
+  GNN, dense edges only: 7.9 min
+  MLP + article evidence (no graph) seed 13: best val nDCG@10 0.8281 after 9 epochs (59,744 params)
+  MLP + article evidence (no graph) seed 42: best val nDCG@10 0.8259 after 9 epochs (59,744 params)
+  MLP + article evidence (no graph) seed 2026: best val nDCG@10 0.8271 after 9 epochs (59,744 params)
+  MLP + article evidence (no graph) seed 7: best val nDCG@10 0.8278 after 9 epochs (59,744 params)
+  MLP + article evidence (no graph) seed 99: best val nDCG@10 0.8315 after 19 epochs (59,744 params)
+  MLP + article evidence (no graph): 4.4 min
+  GNN typed graph + article evidence seed 13: best val nDCG@10 0.8310 after 13 epochs (126,752 params)
+  GNN typed graph + article evidence seed 42: best val nDCG@10 0.8328 after 12 epochs (126,752 params)
+  GNN typed graph + article evidence seed 2026: best val nDCG@10 0.8352 after 17 epochs (126,752 params)
+  GNN typed graph + article evidence seed 7: best val nDCG@10 0.8330 after 17 epochs (126,752 params)
+  GNN typed graph + article evidence seed 99: best val nDCG@10 0.8312 after 10 epochs (126,752 params)
+  GNN typed graph + article evidence: 7.7 min
+  GNN typed graph + article evidence, no dense edges seed 13: best val nDCG@10 0.8349 after 19 epochs (126,752 params)
+  GNN typed graph + article evidence, no dense edges seed 42: best val nDCG@10 0.8348 after 20 epochs (126,752 params)
+  GNN typed graph + article evidence, no dense edges seed 2026: best val nDCG@10 0.8364 after 20 epochs (126,752 params)
+  GNN typed graph + article evidence, no dense edges: 6.5 min
+  GNN typed graph + article evidence, no lexical edges seed 13: best val nDCG@10 0.8342 after 16 epochs (126,752 params)
+  GNN typed graph + article evidence, no lexical edges seed 42: best val nDCG@10 0.8332 after 13 epochs (126,752 params)
+  GNN typed graph + article evidence, no lexical edges seed 2026: best val nDCG@10 0.8320 after 14 epochs (126,752 params)
+  GNN typed graph + article evidence, no lexical edges: 4.7 min
+  GNN typed graph + article evidence, no article/adjacent edges seed 13: best val nDCG@10 0.8310 after 14 epochs (126,752 params)
+  GNN typed graph + article evidence, no article/adjacent edges seed 42: best val nDCG@10 0.8347 after 15 epochs (126,752 params)
+  GNN typed graph + article evidence, no article/adjacent edges seed 2026: best val nDCG@10 0.8347 after 18 epochs (126,752 params)
+  GNN typed graph + article evidence, no article/adjacent edges: 5.2 min
+  TAG-Rank (cheap) seed 13: best val nDCG@10 0.8356 after 20 epochs (126,752 params)
+  TAG-Rank (cheap) seed 42: best val nDCG@10 0.8340 after 17 epochs (126,752 params)
+  TAG-Rank (cheap) seed 2026: best val nDCG@10 0.8324 after 20 epochs (126,752 params)
+  TAG-Rank (cheap) seed 7: best val nDCG@10 0.8334 after 18 epochs (126,752 params)
+  TAG-Rank (cheap) seed 99: best val nDCG@10 0.8322 after 11 epochs (126,752 params)
+  TAG-Rank (cheap): 9.6 min
+  MLP + CE inputs (budget-conditioned) seed 13: best val nDCG@10 0.8564 after 20 epochs (59,744 params)
+loading cross-encoder BAAI/bge-reranker-v2-m3
+    CE 64/20,037 pairs (116/s)
+    CE 2,560/20,037 pairs (138/s)
+    CE 5,056/20,037 pairs (140/s)
+    CE 7,552/20,037 pairs (143/s)
+    CE 10,048/20,037 pairs (145/s)
+    CE 12,544/20,037 pairs (148/s)
+    CE 15,040/20,037 pairs (151/s)
+    CE 17,536/20,037 pairs (157/s)
+    CE 20,032/20,037 pairs (167/s)
+    2-pass needed 20,037 new CE pairs
+  MLP + CE inputs (budget-conditioned) seed 42: best val nDCG@10 0.8553 after 16 epochs (59,744 params)
+    2-pass needed 3,028 new CE pairs
+  MLP + CE inputs (budget-conditioned) seed 2026: best val nDCG@10 0.8562 after 20 epochs (59,744 params)
+    2-pass needed 2,122 new CE pairs
+  MLP + CE inputs (budget-conditioned) seed 7: best val nDCG@10 0.8559 after 10 epochs (59,744 params)
+    2-pass needed 2,114 new CE pairs
+  MLP + CE inputs (budget-conditioned) seed 99: best val nDCG@10 0.8559 after 16 epochs (59,744 params)
+    2-pass needed 2,261 new CE pairs
+  MLP + CE inputs (budget-conditioned): 12.2 min
+  TAG-Rank+CE (budget-conditioned) seed 13: best val nDCG@10 0.8580 after 13 epochs (126,752 params)
+    2-pass needed 2,601 new CE pairs
+  TAG-Rank+CE (budget-conditioned) seed 42: best val nDCG@10 0.8565 after 10 epochs (126,752 params)
+    2-pass needed 1,384 new CE pairs
+  TAG-Rank+CE (budget-conditioned) seed 2026: best val nDCG@10 0.8583 after 16 epochs (126,752 params)
+    2-pass needed 2,353 new CE pairs
+  TAG-Rank+CE (budget-conditioned) seed 7: best val nDCG@10 0.8564 after 10 epochs (126,752 params)
+    2-pass needed 1,173 new CE pairs
+  TAG-Rank+CE (budget-conditioned) seed 99: best val nDCG@10 0.8570 after 10 epochs (126,752 params)
+    2-pass needed 1,120 new CE pairs
+  TAG-Rank+CE (budget-conditioned): 10.5 min
+  ensemble 2-pass needed 1 new CE pairs
+train + evaluate graph rerankers done in 76.7 min (total 145.7 min)
+
+>> cascades, Pareto and router
+extra CE pairs for cascades: 1,354
+router: Spearman(predicted, true CE gain) on MIRACL dev = 0.280
+cascades, Pareto and router done in 0.3 min (total 146.1 min)
+nDCG@10 table computed
+  plot: bridge
+  plot: ndcg
+  plot: published
+  plot: pareto
+  plot: budget gain
+  plot: homophily
+  plot: gar
+  plot: training
